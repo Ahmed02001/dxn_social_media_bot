@@ -50,4 +50,4 @@ if __name__ == "__main__":
     else:
         # بنشغل الـ scheduler الأوتوماتيك
         logger.info("🤖 Starting automated scheduler...")
-        start_scheduler()
+        start_scheduler() 

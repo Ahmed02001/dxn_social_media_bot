@@ -108,6 +108,40 @@ def publish(post_text: str, image_path: str | None = None) -> dict:
 
 
 def verify_page_access() -> bool:
+    url = "https://graph.facebook.com/me/accounts"
+    
+    try:
+        response = requests.get(
+            url,
+            params={
+                "access_token": settings.META_ACCESS_TOKEN,
+            },
+            timeout=10
+        )
+        
+        response.raise_for_status()
+        data = response.json()
+        pages = data.get("data", [])
+        
+        if not pages:
+            logger.error("❌ No pages found")
+            return False
+        
+        for page in pages:
+            logger.info(f"📄 Page: {page.get('name')} | ID: {page.get('id')}")
+            
+            # بناخد أول صفحة تلقائياً
+            # ونحدث الـ Token والـ ID
+            settings.META_ACCESS_TOKEN = page.get("access_token")
+            settings.META_PAGE_ID = page.get("id")
+            logger.info(f"✅ Using page: {page.get('name')}")
+            return True
+            
+        return False
+        
+    except requests.RequestException as e:
+        logger.error(f"❌ Page access verification failed: {e}")
+        return False
     """
     بنتأكد إن الـ Access Token شغال
     وعندنا صلاحية على الصفحة

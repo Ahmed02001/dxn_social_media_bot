@@ -11,15 +11,22 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
+      - name: Remove conflicting packages
+        run: |
+          pip uninstall -y google-generativeai google-ai-generativelanguage || true
+
       - name: Install dependencies
         run: pip install -r requirements.txt
+
+      - name: Verify installation
+        run: python -c "from google import genai; print('✅ google-genai imported successfully')"
 
       - name: Run bot
         env:

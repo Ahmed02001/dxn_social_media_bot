@@ -18,15 +18,14 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Remove conflicting packages
-        run: |
-          pip uninstall -y google-generativeai google-ai-generativelanguage || true
-
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pip install --upgrade pip
+          pip install google-genai==1.16.0 python-dotenv requests schedule Pillow
 
-      - name: Verify installation
-        run: python -c "from google import genai; print('✅ google-genai imported successfully')"
+      - name: Verify google-genai
+        run: |
+          python -c "import google.genai as genai; print('✅ OK:', genai.__version__)"
 
       - name: Run bot
         env:

@@ -1,6 +1,6 @@
 # content/generator.py
 
-from google import genai
+import google.genai as genai
 from google.genai import types
 from config.settings import settings
 from content.prompts import get_prompt
